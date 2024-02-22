@@ -1,0 +1,29 @@
+# Environment Args
+output_root: '../'
+pytorch_data_dir: '/pytorch-data'
+submitting_to_aml: false
+summarize: true
+
+# Dataset args
+dataset: "sample"
+split: "val"
+partition: 0
+total_partitions: 1
+
+# Model Args
+model_type: "dino16"
+activation_type: "token"
+
+# Upsampler args
+outlier_detection: True
+downsampler_type: "attention"
+blur_attn: True
+mag_tv_weight: 0.05
+mag_weight: 0.001
+
+# No need to change
+hydra:
+  run:
+    dir: "."
+  output_subdir: ~
+
