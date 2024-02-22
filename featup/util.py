@@ -4,7 +4,23 @@ import torchvision.transforms as T
 import numpy as np
 from sklearn.decomposition import PCA
 import torch.nn.functional as F
+from collections import defaultdict, deque
 
+class RollingAvg:
+
+    def __init__(self, length):
+        self.length = length
+        self.metrics = defaultdict(lambda: deque(maxlen=self.length))
+
+    def add(self, name, metric):
+        self.metrics[name].append(metric)
+
+    def get(self, name):
+        return torch.tensor(list(self.metrics[name])).mean()
+
+    def logall(self, log_func):
+        for k in self.metrics.keys():
+            log_func(k, self.get(k))
 
 
 def _remove_axes(ax):

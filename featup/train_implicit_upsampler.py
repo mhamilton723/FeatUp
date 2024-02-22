@@ -1,6 +1,5 @@
 import math
 import os
-import random
 from collections import defaultdict
 from datetime import datetime
 from os.path import join, dirname
@@ -14,19 +13,19 @@ from PIL import Image
 from kornia.filters import gaussian_blur2d
 from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning import seed_everything
-from torch.utils.data import Dataset, DataLoader, Subset
+from torch.utils.data import DataLoader, Subset
 from torch.utils.tensorboard import SummaryWriter
 from torchmetrics.functional.regression import explained_variance
 from tqdm import tqdm
 
+from datasets.JitteredImage import JitteredImage, apply_jitter
+from datasets.util import get_dataset, SlicedDataset
 from downsamplers import SimpleDownsampler, AttentionDownsampler
+from featurizers.util import get_featurizer
 from layers import ImplicitFeaturizer, MinMaxScaler, ChannelNorm
+from losses import total_variation
 from util import (norm as reg_norm, unnorm as reg_unorm, generate_subset,
                   midas_norm, midas_unnorm, pca, PCAUnprojector, prep_image)
-from featurizers.util import get_featurizer
-from datasets.util import get_dataset, SlicedDataset
-from losses import entropy, total_variation
-from datasets.JitteredImage import JitteredImage, apply_jitter
 
 torch.multiprocessing.set_sharing_strategy('file_system')
 
