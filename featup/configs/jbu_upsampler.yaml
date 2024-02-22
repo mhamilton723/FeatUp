@@ -1,0 +1,39 @@
+# Environment Args
+output_root: '../../'
+pytorch_data_dir: '/pytorch-data'
+submitting_to_aml: false
+
+# Dataset args
+dataset: "cocostuff"
+
+# Model Args
+model_type: "vit"
+activation_type: "token"
+
+# Upsampling args
+outlier_detection: True
+upsampler_type: "jbu_stack"
+downsampler_type: "attention"
+max_pad: 20
+max_zoom: 2
+n_jitters: 5
+random_projection: 30
+crf_weight: 0.001
+filter_ent_weight: 0.0
+tv_weight: 0.0
+
+implicit_sup_weight: 1.0
+
+# Training args
+batch_size: 4
+epochs: 1
+num_gpus: 1
+num_workers: 24
+lr: 1e-3
+
+# No need to change
+hydra:
+  run:
+    dir: "."
+  output_subdir: ~
+
