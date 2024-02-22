@@ -20,7 +20,7 @@ from downsamplers import SimpleDownsampler, AttentionDownsampler
 from featurizers.util import get_featurizer
 from layers import ChannelNorm
 from losses import TVLoss, SampledCRFLoss, entropy
-from upsamplers import get_upsampler, JBU, LayeredJBU
+from upsamplers import get_upsampler
 from util import pca, RollingAvg, unnorm, norm, prep_image
 
 torch.multiprocessing.set_sharing_strategy('file_system')
@@ -189,12 +189,6 @@ class JBUFeatUp(pl.LightningModule):
         self.avg.add("loss/tv", full_tv_loss)
         self.avg.add("loss/rec", full_rec_loss)
         self.avg.add("loss/total", full_total_loss)
-
-        if isinstance(self.upsampler, JBU):
-            self.log("jbu/sigma_range", self.upsampler.sigma_range)
-            self.log("jbu/sigma_spatial", self.upsampler.sigma_spatial)
-        elif isinstance(self.upsampler, LayeredJBU):
-            self.upsampler.add_logs(self.log)
 
         if self.global_step % 100 == 0:
             self.trainer.save_checkpoint(self.chkpt_dir[:-5] + '/' + self.chkpt_dir[:-5] + f'_{self.global_step}.ckpt')
