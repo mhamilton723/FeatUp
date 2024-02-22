@@ -3,6 +3,7 @@ output_root: '../'
 pytorch_data_dir: '/pytorch-data'
 submitting_to_aml: false
 summarize: true
+experiment_name: "exp1"
 
 # Dataset args
 dataset: "sample"
@@ -11,7 +12,7 @@ partition: 0
 total_partitions: 1
 
 # Model Args
-model_type: "dino16"
+model_type: "vit"
 activation_type: "token"
 
 # Upsampler args
@@ -20,6 +21,20 @@ downsampler_type: "attention"
 blur_attn: True
 mag_tv_weight: 0.05
 mag_weight: 0.001
+color_feats: true
+pca_batch: 50
+proj_dim: 128
+max_pad: 30
+use_flips: true
+max_zoom: 1.8
+blur_pin: 0.1
+n_freqs: 30
+param_type: "implicit"
+use_norm: true
+
+# Training args
+steps: 1200
+n_images: 3000
 
 # No need to change
 hydra:

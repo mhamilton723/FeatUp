@@ -22,7 +22,7 @@ from tqdm import tqdm
 from downsamplers import SimpleDownsampler, AttentionDownsampler
 from layers import ImplicitFeaturizer, MinMaxScaler, ChannelNorm
 from util import (norm as reg_norm, unnorm as reg_unorm, generate_subset,
-                  midas_norm, midas_unnorm, pca, PCAUnprojector)
+                  midas_norm, midas_unnorm, pca, PCAUnprojector, prep_image)
 from featurizers.util import get_featurizer
 from datasets.util import get_dataset, SlicedDataset
 from losses import entropy, total_variation
@@ -54,12 +54,11 @@ def my_app(cfg: DictConfig) -> None:
     seed_everything(0)
 
     input_size_h = 224
-    input_size_w = 224 * 2
-
+    input_size_w = 224
     final_size = 14
-    proj_dim = 128
-    steps = 1200
+    redo = False
 
+    steps = cfg.steps
     if cfg.model_type in {"dino16", "vit", "clip", "midas"}:
         multiplier = 1
         featurize_batch_size = 64
@@ -89,48 +88,19 @@ def my_app(cfg: DictConfig) -> None:
     else:
         raise ValueError(f"Unknown model type {cfg.model_type}")
 
-    color_feats = True
-    pca_batch = 50
-    blur_attn = cfg.blur_attn
-    mag_bound_weight = 0.0
-
-    max_pad = 30
-    use_flips = True
-    max_zoom = 1.8
-
-    blur_pin = 0.1
-
-    mag_weight = cfg.mag_weight
-    mag_tv_weight = cfg.mag_tv_weight
-
-    outlier_detection = cfg.outlier_detection
-    redo = False
-    n_images = 3000
-    n_freqs = 30
-
-    downsampler_type = cfg.downsampler_type
-
-    if downsampler_type == "attention":
+    if cfg.downsampler_type == "attention":
         batch_size = 10
         inner_batch = 10
     else:
         batch_size = 10
         inner_batch = 10
 
-    tv_weight = 0.0
-    filter_ent_weight = 0.0
-    param_type = "implicit"
-
-    use_norm = True
-
-    experiment_name = f"exp1"
-
-    feat_dir = join(cfg.output_root, "feats", experiment_name, cfg.dataset, cfg.split, cfg.model_type)
-    log_dir = join(cfg.output_root, "logs", experiment_name, cfg.dataset, cfg.split, cfg.model_type)
+    feat_dir = join(cfg.output_root, "feats", cfg.experiment_name, cfg.dataset, cfg.split, cfg.model_type)
+    log_dir = join(cfg.output_root, "logs", cfg.experiment_name, cfg.dataset, cfg.split, cfg.model_type)
 
     model, _, dim = get_featurizer(cfg.model_type, activation_type=cfg.activation_type, output_root=cfg.output_root)
 
-    if use_norm:
+    if cfg.use_norm:
         model = torch.nn.Sequential(model, ChannelNorm(dim))
 
     model = model.cuda()
@@ -195,7 +165,7 @@ def my_app(cfg: DictConfig) -> None:
             writer = SummaryWriter(join(log_dir, str(datetime.now())))
 
         params = []
-        dataset = JitteredImage(original_image, n_images, use_flips, max_zoom, max_pad)
+        dataset = JitteredImage(original_image, cfg.n_images, cfg.use_flips, cfg.max_zoom, cfg.max_pad)
         loader = DataLoader(dataset, featurize_batch_size)
         with torch.no_grad():
             transform_params = defaultdict(list)
@@ -207,27 +177,23 @@ def my_app(cfg: DictConfig) -> None:
                 for k, v in tp.items():
                     transform_params[k].append(v)
                 jit_features.append(project(transformed_image).cpu())
-
-            transform_params = {k: torch.cat(v, dim=0) for k, v in transform_params.items()}
             jit_features = torch.cat(jit_features, dim=0)
+            transform_params = {k: torch.cat(v, dim=0) for k, v in transform_params.items()}
 
-            unprojector = PCAUnprojector(jit_features[:pca_batch], proj_dim, lr_feats.device, use_torch_pca=True)
-
+            unprojector = PCAUnprojector(jit_features[:cfg.pca_batch], cfg.proj_dim, lr_feats.device, use_torch_pca=True)
             jit_features = unprojector.project(jit_features)
             lr_feats = unprojector.project(lr_feats)
 
-            lr_mags = mag(lr_feats)
-
-        if param_type == "implicit":
-            end_dim = proj_dim
-            if color_feats:
-                start_dim = 5 * n_freqs * 2 + 3
+        if cfg.param_type == "implicit":
+            end_dim = cfg.proj_dim
+            if cfg.color_feats:
+                start_dim = 5 * cfg.n_freqs * 2 + 3
             else:
-                start_dim = 2 * n_freqs * 2
+                start_dim = 2 * cfg.n_freqs * 2
 
             upsampler = torch.nn.Sequential(
                 MinMaxScaler(),
-                ImplicitFeaturizer(color_feats, n_freqs=n_freqs, learn_bias=True),
+                ImplicitFeaturizer(cfg.color_feats, n_freqs=cfg.n_freqs, learn_bias=True),
                 ChannelNorm(start_dim),
                 torch.nn.Dropout2d(p=.2),
                 torch.nn.Conv2d(start_dim, end_dim, 1),
@@ -238,22 +204,22 @@ def my_app(cfg: DictConfig) -> None:
                 torch.nn.ReLU(),
                 torch.nn.Conv2d(end_dim, end_dim, 1),
             ).cuda()
-        elif param_type == "explicit":
-            upsampler = ExplicitUpsampler(input_size_h, proj_dim).cuda()
+        elif cfg.param_type == "explicit":
+            upsampler = ExplicitUpsampler(input_size_h, cfg.proj_dim).cuda()
         else:
-            raise ValueError(f"Unknown param type {param_type}")
+            raise ValueError(f"Unknown param type {cfg.param_type}")
         params.append({"params": upsampler.parameters()})
 
-        if downsampler_type == "simple":
+        if cfg.downsampler_type == "simple":
             downsampler = SimpleDownsampler(kernel_size, final_size)
         else:
-            downsampler = AttentionDownsampler(proj_dim + 1, kernel_size, final_size, blur_attn).cuda()
+            downsampler = AttentionDownsampler(cfg.proj_dim + 1, kernel_size, final_size, cfg.blur_attn).cuda()
 
         params.append({"params": downsampler.parameters()})
 
-        if outlier_detection:
+        if cfg.outlier_detection:
             with torch.no_grad():
-                outlier_detector = torch.nn.Conv2d(proj_dim, 1, 1).cuda()
+                outlier_detector = torch.nn.Conv2d(cfg.proj_dim, 1, 1).cuda()
                 outlier_detector.weight.copy_(outlier_detector.weight * .1)
                 outlier_detector.bias.copy_(outlier_detector.bias * .1)
 
@@ -279,10 +245,10 @@ def my_app(cfg: DictConfig) -> None:
                 target = []
                 hr_feats_transformed = []
                 for j in range(inner_batch):
-                    idx = torch.randint(n_images, size=())
+                    idx = torch.randint(cfg.n_images, size=())
                     target.append(jit_features[idx].unsqueeze(0))
                     selected_tp = {k: v[idx] for k, v in transform_params.items()}
-                    hr_feats_transformed.append(apply_jitter(hr_both, selected_tp))
+                    hr_feats_transformed.append(apply_jitter(hr_both, cfg.max_pad, selected_tp))
 
                 target = torch.cat(target, dim=0).cuda(non_blocking=True)
                 hr_feats_transformed = torch.cat(hr_feats_transformed, dim=0)
@@ -297,35 +263,18 @@ def my_app(cfg: DictConfig) -> None:
 
                 loss += rec_loss
 
-                if isinstance(downsampler, SimpleDownsampler):
-                    filter_ent = entropy(downsampler.get_kernel())
-                else:
-                    filter_ent = 0.0
-
-                if mag_bound_weight > 0.0:
-                    mag_bound_loss = (hr_mag.max() - lr_mags.max()).square() + \
-                                     (hr_mag.min() - lr_mags.min()).square()
-                    loss += mag_bound_weight * mag_bound_loss
-
-                if tv_weight > 0.0:
-                    tv_loss = total_variation(hr_feats)
-                    loss += tv_weight * tv_loss
-
-                if filter_ent_weight > 0.0:
-                    loss -= filter_ent_weight * filter_ent
-
-                if mag_weight > 0.0:
+                if cfg.mag_weight > 0.0:
                     mag_loss = (magnitude - mag(target)).square().mean()
                     mag_loss2 = (mag(output) - mag(target)).square().mean()
-                    loss += mag_loss * mag_weight
+                    loss += mag_loss * cfg.mag_weight
 
-                if mag_tv_weight > 0.0:
+                if cfg.mag_tv_weight > 0.0:
                     mag_tv = total_variation(hr_mag)
-                    loss += mag_tv_weight * mag_tv
+                    loss += cfg.mag_tv_weight * mag_tv
 
-                if blur_pin > 0.0:
+                if cfg.blur_pin > 0.0:
                     blur_pin_loss = (gaussian_blur2d(hr_feats, 5, (1.0, 1.0)) - hr_feats).square().mean()
-                    loss += blur_pin * blur_pin_loss
+                    loss += cfg.blur_pin * blur_pin_loss
 
                 loss.backward()
 
@@ -339,23 +288,16 @@ def my_app(cfg: DictConfig) -> None:
                     mean_mae = (lr_feats.mean(dim=[2, 3]) - hr_feats.mean(dim=[2, 3])).abs().mean()
                     writer.add_scalar("mean_mae", mean_mae, step)
                     writer.add_scalar("rec loss", rec_loss, step)
-                    writer.add_scalar("filter ent", filter_ent, step)
                     writer.add_scalar("mean scale", scales.mean(), step)
 
-                    if mag_weight > 0.0:
+                    if cfg.mag_weight > 0.0:
                         writer.add_scalar("mag loss", mag_loss, step)
                         writer.add_scalar("mag loss2", mag_loss2, step)
 
-                    if mag_tv_weight > 0.0:
+                    if cfg.mag_tv_weight > 0.0:
                         writer.add_scalar("mag tv", mag_tv, step)
 
-                    if tv_weight > 0.0:
-                        writer.add_scalar("tv loss", tv_loss, step)
-
-                    if mag_bound_weight > 0.0:
-                        writer.add_scalar("mag_bound loss", mag_bound_loss, step)
-
-                    if blur_pin > 0.0:
+                    if cfg.blur_pin > 0.0:
                         writer.add_scalar("blur pin loss", blur_pin_loss, step)
 
                 if should_log and step % 100 == 0:
@@ -369,10 +311,10 @@ def my_app(cfg: DictConfig) -> None:
                         target = []
                         hr_feats_transformed = []
                         for j in range(inner_batch):
-                            idx = torch.randint(n_images, size=())
+                            idx = torch.randint(cfg.n_images, size=())
                             target.append(jit_features[idx].unsqueeze(0))
                             selected_tp = {k: v[idx] for k, v in transform_params.items()}
-                            hr_feats_transformed.append(apply_jitter(hr_both, selected_tp))
+                            hr_feats_transformed.append(apply_jitter(hr_both, cfg.max_pad, selected_tp))
 
                         target = torch.cat(target, dim=0).cuda(non_blocking=True)
                         hr_feats_transformed = torch.cat(hr_feats_transformed, dim=0)
@@ -424,29 +366,24 @@ def my_app(cfg: DictConfig) -> None:
                         writer.add_figure("magnitudes", fig, step)
 
                         if isinstance(downsampler, SimpleDownsampler):
-                            prepped_filter = downsampler.get_kernel().squeeze().unsqueeze(0)
-                            prepped_filter /= prepped_filter.max()
-                            prepped_filter = (prepped_filter * 255).clamp(0, 255).to(torch.uint8)
-                            writer.add_image("down/filter", prepped_filter, step)
+                            writer.add_image(
+                                "down/filter",
+                                prep_image(downsampler.get_kernel().squeeze(), subtract_min=False),
+                                step)
 
                         if isinstance(downsampler, AttentionDownsampler):
-                            prepped_att = downsampler.forward_attention(hr_both, None)[0]
-                            prepped_att -= prepped_att.min()
-                            prepped_att /= prepped_att.max()
-                            prepped_att = (prepped_att * 255).clamp(0, 255).to(torch.uint8)
-                            writer.add_image("down/att", prepped_att, step)
-
-                            prepped_filter = downsampler.w.clone().squeeze()
-                            prepped_filter -= prepped_filter.min()
-                            prepped_filter /= prepped_filter.max()
-                            prepped_filter = (prepped_filter * 255).clamp(0, 255).to(torch.uint8)
-                            writer.add_image("down/w", prepped_filter.unsqueeze(0), step)
-
-                            prepped_filter = downsampler.b.clone().squeeze()
-                            prepped_filter -= prepped_filter.min()
-                            prepped_filter /= prepped_filter.max()
-                            prepped_filter = (prepped_filter * 255).clamp(0, 255).to(torch.uint8)
-                            writer.add_image("down/b", prepped_filter.unsqueeze(0), step)
+                            writer.add_image(
+                                "down/att",
+                                prep_image(downsampler.forward_attention(hr_both, None)[0]),
+                                step)
+                            writer.add_image(
+                                "down/w",
+                                prep_image(downsampler.w.clone().squeeze()),
+                                step)
+                            writer.add_image(
+                                "down/b",
+                                prep_image(downsampler.b.clone().squeeze()),
+                                step)
 
                     writer.flush()
 

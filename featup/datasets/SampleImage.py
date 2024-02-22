@@ -1,12 +1,5 @@
-import torch
-import os
 from PIL import Image
 from torch.utils.data import Dataset
-
-import random
-from collections import Counter
-import argparse
-from os.path import join
 
 
 class SampleImage(Dataset):

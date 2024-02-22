@@ -5,6 +5,7 @@ from .CUB import CUB
 from .DAVIS import DAVIS
 from .SampleImage import SampleImage
 
+
 class SlicedDataset(Dataset):
     def __init__(self, ds, start, end):
         self.ds = ds

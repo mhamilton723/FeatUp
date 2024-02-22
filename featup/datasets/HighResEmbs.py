@@ -7,8 +7,9 @@ import torch.nn.functional as F
 from sklearn.decomposition import PCA
 from torch.utils.data import Dataset, DataLoader, Subset
 from torch.utils.data import default_collate
-from tqdm import tqdm, trange
-from util.util import get_dataset
+from tqdm import tqdm
+
+from util import get_dataset
 
 torch.multiprocessing.set_sharing_strategy('file_system')
 
@@ -92,7 +93,7 @@ class HighResEmbHelper(Dataset):
 
         if split == 'train':
             self.dataset = Subset(self.dataset, generate_subset(len(self.dataset), 5000))
-            #TODO factor this limit out
+            # TODO factor this limit out
 
         if limit is not None:
             self.dataset = Subset(self.dataset, range(0, limit))
@@ -115,7 +116,6 @@ def load_hr_emb(image, loaded_model, target_res):
     else:
         hr_model = loaded_model["model"].cuda().eval()
         unprojector = loaded_model["unprojector"].eval()
-
 
     with torch.no_grad():
         original_image = F.interpolate(

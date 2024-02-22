@@ -238,3 +238,15 @@ class PCAUnprojector(torch.nn.Module):
             t0 = feats_reshaped - self.mean_.unsqueeze(0).to(feats.device)
             projected = t0 @ self.components_.T.to(feats.device)
             return projected.reshape(b, h, w, self.dim).permute(0, 3, 1, 2)
+
+
+def prep_image(t, subtract_min=True):
+    if subtract_min:
+        t -= t.min()
+    t /= t.max()
+    t = (t * 255).clamp(0, 255).to(torch.uint8)
+
+    if len(t.shape) == 2:
+        t = t.unsqueeze(0)
+
+    return t

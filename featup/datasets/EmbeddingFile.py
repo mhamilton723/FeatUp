@@ -33,7 +33,6 @@ class EmbeddingFile(Dataset):
         return len(self.labels)
 
 
-
 class EmbeddingAndImage(Dataset):
     def __init__(self, file, dataset):
         super(Dataset, self).__init__()

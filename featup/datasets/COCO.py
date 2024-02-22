@@ -146,4 +146,3 @@ class Coco(Dataset):
     def colorize_label(label):
         cmap = create_pascal_label_colormap()
         return cmap[label.cpu()].astype(np.uint8)
-

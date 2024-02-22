@@ -1,12 +1,8 @@
-import os
-import torch
-from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
-from PIL import Image
 import os
 from PIL import Image
 from torch.utils.data import Dataset
-import torch
+
 
 class DAVIS(Dataset):
     def __init__(self, root, video_name, transform=None):
@@ -30,8 +26,7 @@ class DAVIS(Dataset):
         if self.transform:
             image = self.transform(image)
 
-        return {"img":image, "img_path":img_path}
-
+        return {"img": image, "img_path": img_path}
 
 
 if __name__ == "__main__":

@@ -1,5 +1,3 @@
-import os
-
 from torchvision.datasets import folder
 from torchvision.datasets.vision import VisionDataset
 from glob import glob
