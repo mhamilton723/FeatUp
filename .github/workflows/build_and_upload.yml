@@ -8,6 +8,9 @@ on:
 jobs:
   build-and-upload:
     runs-on: ubuntu-latest
+    container:
+      image: nvidia/cuda:11.0-base  # Use an appropriate CUDA image
+      options: --gpus all
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
@@ -26,4 +29,3 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
-
