@@ -9,7 +9,7 @@ jobs:
   build-and-upload:
     runs-on: ubuntu-latest
     container:
-      image: nvidia/cuda:11.0-base  # Use an appropriate CUDA image
+      image: nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
       options: --gpus all
     steps:
     - uses: actions/checkout@v2
