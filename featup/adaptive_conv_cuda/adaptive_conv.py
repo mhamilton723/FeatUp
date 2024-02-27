@@ -1,8 +1,5 @@
-import math
-from torch import nn
 from torch.autograd import Function
 import torch
-import time
 
 from featup.adaptive_conv_cuda import cuda_impl
 

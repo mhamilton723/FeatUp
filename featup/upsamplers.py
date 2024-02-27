@@ -3,7 +3,6 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from mmcv.ops import CARAFEPack
 from timm.models.layers import trunc_normal_
 
 from featup.adaptive_conv_cuda.adaptive_conv import AdaptiveConv
@@ -143,6 +142,7 @@ class CarafeUpsampler(torch.nn.Module):
 
     def __init__(self, dim, kernel_size, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        from mmcv.ops import CARAFEPack
         self.up1 = CARAFEPack(dim, up_kernel=3, up_group=1, scale_factor=2)
         self.up2 = CARAFEPack(dim, up_kernel=3, up_group=1, scale_factor=2)
         self.up3 = CARAFEPack(dim, up_kernel=3, up_group=1, scale_factor=2)

@@ -14,9 +14,9 @@ from pytorch_lightning.utilities.seed import seed_everything
 from torch.utils.data import DataLoader
 from torchmetrics.classification import Accuracy, JaccardIndex
 
-from datasets.COCO import Coco
-from datasets.EmbeddingFile import EmbeddingFile
-from losses import ScaleAndShiftInvariantLoss
+from featup.datasets.COCO import Coco
+from featup.datasets.EmbeddingFile import EmbeddingFile
+from featup.losses import ScaleAndShiftInvariantLoss
 from featup.util import pca
 from featup.util import remove_axes
 

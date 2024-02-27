@@ -14,14 +14,14 @@ from pytorch_lightning.loggers import TensorBoardLogger
 from torch.utils.data import DataLoader
 from torchvision.transforms import InterpolationMode
 
-from datasets.JitteredImage import apply_jitter, sample_transform
-from datasets.util import get_dataset, SingleImageDataset
-from downsamplers import SimpleDownsampler, AttentionDownsampler
-from featurizers.util import get_featurizer
-from layers import ChannelNorm
-from losses import TVLoss, SampledCRFLoss, entropy
-from upsamplers import get_upsampler
-from util import pca, RollingAvg, unnorm, norm, prep_image
+from featup.datasets.JitteredImage import apply_jitter, sample_transform
+from featup.datasets.util import get_dataset, SingleImageDataset
+from featup.downsamplers import SimpleDownsampler, AttentionDownsampler
+from featup.featurizers.util import get_featurizer
+from featup.layers import ChannelNorm
+from featup.losses import TVLoss, SampledCRFLoss, entropy
+from featup.upsamplers import get_upsampler
+from featup.util import pca, RollingAvg, unnorm, norm, prep_image
 
 torch.multiprocessing.set_sharing_strategy('file_system')
 

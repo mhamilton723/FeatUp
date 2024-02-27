@@ -7,6 +7,17 @@ setup(
     packages=find_packages(),
     install_requires=[
         'torch',
+        'kornia',
+        'omegaconf',
+        'pytorch-lightning',
+        'torchvision',
+        'tqdm',
+        'torchemetrics',
+        'sklearn',
+        'numpy',
+        'matplotlib',
+        'glob',
+
     ],
     author='Mark Hamilton, Stephanie Fu',
     author_email='markth@mit.edu, fus@berkeley.edu',
