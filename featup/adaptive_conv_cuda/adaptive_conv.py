@@ -4,7 +4,7 @@ from torch.autograd import Function
 import torch
 import time
 
-import cuda_impl
+from featup.adaptive_conv_cuda import cuda_impl
 
 torch.manual_seed(42)
 

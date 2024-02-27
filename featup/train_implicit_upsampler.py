@@ -18,13 +18,13 @@ from torch.utils.tensorboard import SummaryWriter
 from torchmetrics.functional.regression import explained_variance
 from tqdm import tqdm
 
-from datasets.JitteredImage import JitteredImage, apply_jitter
-from datasets.util import get_dataset, SlicedDataset
-from downsamplers import SimpleDownsampler, AttentionDownsampler
-from featurizers.util import get_featurizer
-from layers import ImplicitFeaturizer, MinMaxScaler, ChannelNorm
-from losses import total_variation
-from util import (norm as reg_norm, unnorm as reg_unorm, generate_subset,
+from featup.datasets.JitteredImage import JitteredImage, apply_jitter
+from featup.datasets.util import get_dataset, SlicedDataset
+from featup.downsamplers import SimpleDownsampler, AttentionDownsampler
+from featup.featurizers.util import get_featurizer
+from featup.layers import ImplicitFeaturizer, MinMaxScaler, ChannelNorm
+from featup.losses import total_variation
+from featup.util import (norm as reg_norm, unnorm as reg_unorm, generate_subset,
                   midas_norm, midas_unnorm, pca, PCAUnprojector, prep_image)
 
 torch.multiprocessing.set_sharing_strategy('file_system')

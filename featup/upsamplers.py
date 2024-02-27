@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from mmcv.ops import CARAFEPack
 from timm.models.layers import trunc_normal_
 
-from adaptive_conv_cuda.adaptive_conv import AdaptiveConv
+from featup.adaptive_conv_cuda.adaptive_conv import AdaptiveConv
 
 
 class SimpleImplicitFeaturizer(torch.nn.Module):

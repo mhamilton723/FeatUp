@@ -1,7 +1,6 @@
 from torch.utils.data import Dataset
 from .ImageNetSubset import ImageNetSubset
 from .COCO import Coco
-from .CUB import CUB
 from .DAVIS import DAVIS
 from .SampleImage import SampleImage
 

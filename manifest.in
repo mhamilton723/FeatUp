@@ -1,0 +1,5 @@
+include README.md
+recursive-include featup/adaptive_conv_cuda *.cpp *.cu *.h
+recursive-include featup/configs *.yaml
+recursive-include featup/featurizers *.py
+recursive-include sample-images *
