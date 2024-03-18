@@ -1,4 +1,4 @@
-# FeatUp: A Model-Agnostic Frameworkfor Features at Any Resolution
+# FeatUp: A Model-Agnostic Framework for Features at Any Resolution
 ### [Project Page](https://aka.ms/featup) | [Paper](https://aka.ms/featup-paper) | [Colab Notebook](https://colab.research.google.com/github/mhamilton723/FeatUp/blob/main/example_usage.ipynb) | ICLR 2024
 
 
@@ -23,10 +23,6 @@ https://github.com/mhamilton723/FeatUp/assets/6456637/8fb5aa7f-4514-4a97-aebf-76
    * [Install](#install)
    * [Using Pretrained Upsamplers](#using-pretrained-upsamplers)
    * [Coming Soon](coming-soon)
-   * [Understanding FeatUp](#understanding-stego)
-      * [Feature Upsampling](#unsupervised-semantic-segmentation)
-      * [The FeatUp architecture](#the-stego-architecture)
-      * [Results](#results)
    * [Citation](#citation)
    * [Contact](#contact)
 <!--te-->
@@ -64,6 +60,21 @@ For example, to load the FeatUp JBU upsampler for the DINO backbone:
 ```python
 upsampler = torch.hub.load("mhamilton723/FeatUp", 'dino16')
 ```
+
+## Fitting an Implicit Upsampler to an Image
+
+To train an implicit upsampler for a given image and backbone first clone the repository and install it for 
+[local development](#local-development). Then run
+
+```python
+cd featup
+python train_implicit_upsampler.py
+```
+
+Parameters for this training operation can be found in the [implicit_upsampler config file](featup/configs/implicit_upsampler.yaml).
+
+
+
 
 ## Coming Soon:
 

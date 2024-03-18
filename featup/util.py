@@ -260,7 +260,7 @@ class PCAUnprojector(nn.Module):
         else:
             b, c, h, w = red_feats.shape
             red_feats_reshaped = red_feats.permute(0, 2, 3, 1).reshape(b * h * w, c)
-            unprojected = (red_feats_reshaped @ self.components_.t()) + self.mean_.unsqueeze(0)
+            unprojected = (red_feats_reshaped @ self.components_) + self.mean_.unsqueeze(0)
             return unprojected.reshape(b, h, w, self.original_dim).permute(0, 3, 1, 2)
 
     def project(self, feats):
