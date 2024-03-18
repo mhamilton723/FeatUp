@@ -22,6 +22,7 @@ https://github.com/mhamilton723/FeatUp/assets/6456637/8fb5aa7f-4514-4a97-aebf-76
 <!--ts-->
    * [Install](#install)
    * [Using Pretrained Upsamplers](#using-pretrained-upsamplers)
+   * [Fitting an Implicit Upsampler](#fitting-an-implicit-upsampler-to-an-image)
    * [Coming Soon](coming-soon)
    * [Citation](#citation)
    * [Contact](#contact)
