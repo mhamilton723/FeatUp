@@ -12,7 +12,6 @@
 [Axel Feldman](https://feldmann.nyc/),
 [Zhoutong Zhang](https://ztzhang.info/),
 [William T. Freeman](https://billf.mit.edu/about/bio)
-
 *Equal Contribution.
 
 ![FeatUp Overview Graphic](https://mhamilton.net/images/website_hero_small-p-1080.jpg)
