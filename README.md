@@ -1,5 +1,9 @@
 # FeatUp: A Model-Agnostic Framework for Features at Any Resolution
-### [Project Page](https://aka.ms/featup) | [Paper](https://aka.ms/featup-paper) | [Colab Notebook](https://colab.research.google.com/github/mhamilton723/FeatUp/blob/main/example_usage.ipynb) | ICLR 2024
+###  ICLR 2024
+
+
+[![Website](https://img.shields.io/badge/FeatUp-%F0%9F%8C%90Website-purple?style=flat)](https://aka.ms/featup) [![arXiv](https://img.shields.io/badge/arXiv-2403.10516-b31b1b.svg)](https://arxiv.org/abs/2403.10516) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mhamilton723/FeatUp/blob/main/example_usage.ipynb)
+[![Huggingface](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-FeatUp-orange)](https://huggingface.co/spaces/mhamilton723/FeatUp)
 
 
 [Stephanie Fu*](https://stephanie-fu.github.io/),
