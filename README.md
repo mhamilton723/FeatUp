@@ -13,9 +13,9 @@
 [Zhoutong Zhang](https://ztzhang.info/),
 [William T. Freeman](https://billf.mit.edu/about/bio)
 
-![FeatUp Overview Graphic](https://mhamilton.net/images/website_hero_small-p-1080.jpg)
+*Equal Contribution.
 
-This is the official implementation of the paper "FeatUp: A Model-Agnostic Framework for Features at Any Resolution". *Equal Contribution.
+![FeatUp Overview Graphic](https://mhamilton.net/images/website_hero_small-p-1080.jpg)
 
 *TL;DR*:FeatUp improves the spatial resolution of any model's features by 16-32x without changing their semantics.
 
