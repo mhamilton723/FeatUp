@@ -404,13 +404,14 @@ class DINOFeaturizer(nn.Module):
         #     state_dict = torch.hub.load('facebookresearch/dinov2:main', self.arch).state_dict()
         elif "dino" in arch:
             state_dict = torch.hub.load('facebookresearch/dino:main', self.arch).state_dict()
-        else:  # model from timm -- load weights from timm to dino model (enables working on arbitrary size images).
+        elif arch is not None:  # model from timm -- load weights from timm to dino model (enables working on arbitrary size images).
             temp_model = timm.create_model(self.arch, pretrained=True)
             state_dict = temp_model.state_dict()
             del state_dict['head.weight']
             del state_dict['head.bias']
 
-        self.model.load_state_dict(state_dict, strict=True)
+        if arch is not None:
+            self.model.load_state_dict(state_dict, strict=True)
 
         if arch == "vit_small":
             self.n_feats = 384

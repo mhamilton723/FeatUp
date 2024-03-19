@@ -1,13 +1,16 @@
 import clip
 import torch
 from torch import nn
-
+import os
 
 class CLIPFeaturizer(nn.Module):
 
-    def __init__(self):
+    def __init__(self, download_root):
         super().__init__()
-        self.model, self.preprocess = clip.load("ViT-B/16")
+        self.model, self.preprocess = clip.load(
+            "ViT-B/16",
+            download_root=os.getenv('TORCH_HOME', os.path.join(os.path.expanduser('~'), '.cache', 'torch'))
+        )
         self.model.eval().cuda()
 
     def get_cls_token(self, img):
