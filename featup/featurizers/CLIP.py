@@ -5,7 +5,7 @@ import os
 
 class CLIPFeaturizer(nn.Module):
 
-    def __init__(self, download_root):
+    def __init__(self):
         super().__init__()
         self.model, self.preprocess = clip.load(
             "ViT-B/16",
