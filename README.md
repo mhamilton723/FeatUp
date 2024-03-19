@@ -4,9 +4,9 @@
 
 [Stephanie Fu*](https://stephanie-fu.github.io/),
 [Mark Hamilton*](https://mhamilton.net/),
-[Zhoutong Zhang](https://ztzhang.info/),
 [Laura Brandt](https://people.csail.mit.edu/lebrandt/),
 [Axel Feldman](https://feldmann.nyc/),
+[Zhoutong Zhang](https://ztzhang.info/),
 [William T. Freeman](https://billf.mit.edu/about/bio)
 
 ![FeatUp Overview Graphic](https://mhamilton.net/images/website_hero_small-p-1080.jpg)
