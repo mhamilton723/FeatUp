@@ -16,6 +16,7 @@ setup(
         'scikit-learn',
         'numpy',
         'matplotlib',
+        'timm',
     ],
     author='Mark Hamilton, Stephanie Fu',
     author_email='markth@mit.edu, fus@berkeley.edu',
