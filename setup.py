@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from torch.utils.cpp_extension import BuildExtension, CUDAExtension
+from torch.utils.cpp_extension import BuildExtension, CUDAExtension, CppExtension
 
 setup(
     name='featup',
@@ -30,10 +30,16 @@ setup(
     ],
     python_requires='>=3.6',
     ext_modules=[
-        CUDAExtension('featup.adaptive_conv_cuda.cuda_impl', [
-            'featup/adaptive_conv_cuda/adaptive_conv_cuda.cpp',
-            'featup/adaptive_conv_cuda/adaptive_conv_kernel.cu',
-        ]),
+        CUDAExtension(
+            'featup.adaptive_conv_cuda.cuda_impl',
+            [
+                'featup/adaptive_conv_cuda/adaptive_conv_cuda.cpp',
+                'featup/adaptive_conv_cuda/adaptive_conv_kernel.cu',
+            ]),
+        CppExtension(
+            'featup.adaptive_conv_cuda.cpp_impl',
+            ['featup/adaptive_conv_cuda/adaptive_conv.cpp'],
+            undef_macros=["NDEBUG"]),
     ],
     cmdclass={
         'build_ext': BuildExtension
