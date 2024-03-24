@@ -10,10 +10,13 @@ dependencies = ['torch', 'torchvision', 'PIL', 'featup']  # List any dependencie
 
 class UpsampledBackbone(Module):
 
-    def __init__(self, model_name):
+    def __init__(self, model_name, use_norm):
         super().__init__()
         model, patch_size, self.dim = get_featurizer(model_name, "token", num_classes=1000)
-        self.model = torch.nn.Sequential(model, ChannelNorm(self.dim))
+        if use_norm:
+            self.model = torch.nn.Sequential(model, ChannelNorm(self.dim))
+        else:
+            self.model = model
         self.upsampler = get_upsampler("jbu_stack", self.dim)
 
     def forward(self, image):
@@ -28,7 +31,7 @@ def _load_backbone(pretrained, use_norm, model_name):
     Returns:
         An instance of your model.
     """
-    model = UpsampledBackbone(model_name)
+    model = UpsampledBackbone(model_name, use_norm)
     if pretrained:
         # Define how you load your pretrained weights here
         # For example:
