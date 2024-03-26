@@ -86,7 +86,15 @@ python train_implicit_upsampler.py
 
 Parameters for this training operation can be found in the [implicit_upsampler config file](featup/configs/implicit_upsampler.yaml).
 
+## Local Gradio Demo
 
+To run our [HuggingFace Spaces hosted FeatUp demo](https://huggingface.co/spaces/mhamilton723/FeatUp) locally first install FeatUp for local development. Then  run:
+
+```shell
+python gradio_app.py
+```
+
+Wait a few seconds for the demo to spin up, then navigate to [http://localhost:7860/](http://localhost:7860/) to view the demo.
 
 
 ## Coming Soon:
