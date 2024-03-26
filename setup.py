@@ -32,13 +32,13 @@ setup(
     python_requires='>=3.6',
     ext_modules=[
         CUDAExtension(
-            'featup.adaptive_conv_cuda.cuda_impl',
+            'adaptive_conv_cuda_impl',
             [
                 'featup/adaptive_conv_cuda/adaptive_conv_cuda.cpp',
                 'featup/adaptive_conv_cuda/adaptive_conv_kernel.cu',
             ]),
         CppExtension(
-            'featup.adaptive_conv_cuda.cpp_impl',
+            'adaptive_conv_cpp_impl',
             ['featup/adaptive_conv_cuda/adaptive_conv.cpp'],
             undef_macros=["NDEBUG"]),
     ],
