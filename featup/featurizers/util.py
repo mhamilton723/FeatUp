@@ -10,37 +10,37 @@ def get_featurizer(name, activation_type="key", **kwargs):
     elif name == "midas":
         from .MIDAS import MIDASFeaturizer
         patch_size = 16
-        model = MIDASFeaturizer(output_root=kwargs["output_root"]).cuda()
+        model = MIDASFeaturizer(output_root=kwargs["output_root"])
         dim = 768
     elif name == "dino16":
         from .DINO import DINOFeaturizer
         patch_size = 16
-        model = DINOFeaturizer("dino_vits16", patch_size, activation_type).cuda()
+        model = DINOFeaturizer("dino_vits16", patch_size, activation_type)
         dim = 384
     elif name == "dino8":
         from .DINO import DINOFeaturizer
         patch_size = 8
-        model = DINOFeaturizer("dino_vits8", patch_size, activation_type).cuda()
+        model = DINOFeaturizer("dino_vits8", patch_size, activation_type)
         dim = 384
     elif name == "dinov2":
         from .DINOv2 import DINOv2Featurizer
-        patch_size = 16
-        model = DINOv2Featurizer("dinov2_vits14", patch_size, activation_type).cuda()
+        patch_size = 14
+        model = DINOv2Featurizer("dinov2_vits14", patch_size, activation_type)
         dim = 384
     elif name == "clip":
         from .CLIP import CLIPFeaturizer
         patch_size = 16
-        model = CLIPFeaturizer().cuda()
+        model = CLIPFeaturizer()
         dim = 512
     elif name == "mae":
         from .MAE import MAEFeaturizer
         patch_size = 16
-        model = MAEFeaturizer(**kwargs).cuda()
+        model = MAEFeaturizer(**kwargs)
         dim = 1024
     elif name == "mocov3":
         from .MOCOv3 import MOCOv3Featurizer
         patch_size = 16
-        model = MOCOv3Featurizer().cuda()
+        model = MOCOv3Featurizer()
         dim = 384
     elif name == "msn":
         from .MSN import MSNFeaturizer

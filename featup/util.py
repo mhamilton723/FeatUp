@@ -65,17 +65,6 @@ midas_norm = T.Normalize([0.5] * 3, [0.5] * 3)
 midas_unnorm = UnNormalize([0.5] * 3, [0.5] * 3)
 
 
-def pca(feats, dim=3, fit_pca=None):
-    B, C, H, W = feats.shape
-    x = feats.permute(1, 0, 2, 3).reshape(C, B * H * W).permute(1, 0).detach().cpu().numpy()
-    if fit_pca is None:
-        fit_pca = PCA(n_components=dim).fit(x)
-    x_red = torch.from_numpy(fit_pca.transform(x))
-    x_red -= x_red.min(dim=0, keepdim=True).values
-    x_red /= x_red.max(dim=0, keepdim=True).values
-    return x_red.reshape(B, H, W, dim).permute(0, 3, 1, 2).to(feats.device), fit_pca
-
-
 class ToTargetTensor(object):
     def __call__(self, target):
         return torch.as_tensor(np.array(target), dtype=torch.int64).unsqueeze(0)
