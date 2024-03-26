@@ -12,7 +12,7 @@ partition: 0
 total_partitions: 1
 
 # Model Args
-model_type: "vit"
+model_type: "dinov2"
 activation_type: "token"
 
 # Upsampler args

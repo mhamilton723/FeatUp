@@ -431,4 +431,6 @@ class DINOv2Featurizer(nn.Module):
         return self.model.forward(img)
 
     def forward(self, img, n=1, include_cls=False):
-        return self.model.forward_features(img)["x_norm_patchtokens"].reshape(-1, 16, 16, 384).permute(0, 3, 1, 2)
+        h = img.shape[2] // self.patch_size
+        w = img.shape[3] // self.patch_size
+        return self.model.forward_features(img)["x_norm_patchtokens"].reshape(-1, h, w, 384).permute(0, 3, 1, 2)
