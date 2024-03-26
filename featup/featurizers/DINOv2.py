@@ -424,11 +424,6 @@ class DINOv2Featurizer(nn.Module):
         self.patch_size = patch_size
         self.feat_type = feat_type
 
-        # self.model = vit_small(patch_size=patch_size, img_size=518)
-
-        # state_dict = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14').state_dict()
-        #
-        # self.model.load_state_dict(state_dict, strict=False)
         self.n_feats = 128
         self.model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14')
 
