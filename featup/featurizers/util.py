@@ -32,6 +32,11 @@ def get_featurizer(name, activation_type="key", **kwargs):
         patch_size = 16
         model = CLIPFeaturizer()
         dim = 512
+    elif name == "maskclip":
+        from .MaskCLIP import MaskCLIPFeaturizer
+        patch_size = 16
+        model = MaskCLIPFeaturizer()
+        dim = 512
     elif name == "mae":
         from .MAE import MAEFeaturizer
         patch_size = 16
