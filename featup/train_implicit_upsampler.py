@@ -74,7 +74,7 @@ def my_app(cfg: DictConfig) -> None:
     redo = False
 
     steps = cfg.steps
-    if cfg.model_type in {"dino16", "vit", "clip", "midas"}:
+    if cfg.model_type in {"dino16", "vit", "clip", "midas", "maskclip"}:
         multiplier = 1
         featurize_batch_size = 64
         kernel_size = 29
