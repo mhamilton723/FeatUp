@@ -77,7 +77,7 @@ Tensor adaptive_conv_grad_input(Tensor grad_output, Tensor filters) {
                             int32_t h_out = h - i;
                             int32_t w_out = w - j;
 
-                            if (h_out >= 0 and w_out >= 0 and h_out < H_out and w_out < W_out) {
+                            if ((h_out >= 0) && (w_out >= 0) && (h_out < H_out) && (w_out < W_out)) {
                                 auto grad = grad_output[b][c][h_out][w_out];
                                 auto weight = filters[b][h_out][w_out][i][j];
 
