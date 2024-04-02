@@ -1,7 +1,6 @@
 import torch
 from torch import nn
 import os
-import einops
 
 from featup.featurizers.maskclip import clip
 
@@ -18,13 +17,11 @@ class MaskCLIPFeaturizer(nn.Module):
         self.patch_size = self.model.visual.patch_size
 
     def forward(self, img):
-        input_size_h, input_size_w = img.shape[2:]
+        b, _, input_size_h, input_size_w = img.shape
         patch_h = input_size_h // self.patch_size
         patch_w = input_size_w // self.patch_size
         features = self.model.get_patch_encodings(img).to(torch.float32)
-        features = einops.rearrange(
-            features, "b (h w) c -> b c h w", h=patch_h, w=patch_w)
-        return features
+        return features.reshape(b, patch_h, patch_w, -1).permute(0, 3, 1, 2)
 
 
 if __name__ == "__main__":

@@ -394,7 +394,7 @@ def my_app(cfg: DictConfig) -> None:
             optim.step()
             optim.zero_grad()
 
-        torch.save({"model": upsampler, "unprojector": unprojector}, output_location)
+        torch.save({"model": upsampler.state_dict(), "unprojector": unprojector.state_dict()}, output_location)
 
 
 if __name__ == "__main__":

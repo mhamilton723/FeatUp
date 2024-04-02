@@ -65,3 +65,7 @@ def dinov2(pretrained=True, use_norm=True):
 
 def resnet50(pretrained=True, use_norm=True):
     return _load_backbone(pretrained, use_norm, "resnet50")
+
+def maskclip(pretrained=True, use_norm=True):
+    assert not use_norm, "MaskCLIP only supports unnormed model"
+    return _load_backbone(pretrained, use_norm, "maskclip")
