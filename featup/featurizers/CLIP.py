@@ -11,7 +11,7 @@ class CLIPFeaturizer(nn.Module):
             "ViT-B/16",
             download_root=os.getenv('TORCH_HOME', os.path.join(os.path.expanduser('~'), '.cache', 'torch'))
         )
-        self.model.eval().cuda()
+        self.model.eval()
 
     def get_cls_token(self, img):
         return self.model.encode_image(img).to(torch.float32)

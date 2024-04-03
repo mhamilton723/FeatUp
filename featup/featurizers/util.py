@@ -5,7 +5,7 @@ def get_featurizer(name, activation_type="key", **kwargs):
     if name == "vit":
         from .DINO import DINOFeaturizer
         patch_size = 16
-        model = DINOFeaturizer("vit_small_patch16_224", patch_size, activation_type).cuda()
+        model = DINOFeaturizer("vit_small_patch16_224", patch_size, activation_type)
         dim = 384
     elif name == "midas":
         from .MIDAS import MIDASFeaturizer
@@ -50,7 +50,7 @@ def get_featurizer(name, activation_type="key", **kwargs):
     elif name == "msn":
         from .MSN import MSNFeaturizer
         patch_size = 16
-        model = MSNFeaturizer().cuda()
+        model = MSNFeaturizer()
         dim = 384
     elif name == "pixels":
         patch_size = 1

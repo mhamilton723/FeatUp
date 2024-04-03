@@ -113,7 +113,7 @@ class VGG(nn.Module):
     def CLRP(self, x, maxindex = [None]):
         if maxindex == [None]:
             maxindex = torch.argmax(x, dim=1)
-        R = torch.ones(x.shape).cuda()
+        R = torch.ones(x.shape, x.device)
         R /= -self.num_classes
         for i in range(R.size(0)):
             R[i, maxindex[i]] = 1

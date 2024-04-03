@@ -32,7 +32,7 @@ class ScaleNet(torch.nn.Module):
     def __init__(self, dim):
         super().__init__()
         self.dim = dim
-        self.net = torch.nn.Conv2d(dim, 1, 1).cuda()
+        self.net = torch.nn.Conv2d(dim, 1, 1)
         with torch.no_grad():
             self.net.weight.copy_(self.net.weight * .1)
             self.net.bias.copy_(self.net.bias * .1)

@@ -14,7 +14,7 @@ class SimpleDownsampler(torch.nn.Module):
         super().__init__(*args, **kwargs)
         self.kernel_size = kernel_size
         self.final_size = final_size
-        self.kernel_params = torch.nn.Parameter(torch.ones(kernel_size, kernel_size).cuda())
+        self.kernel_params = torch.nn.Parameter(torch.ones(kernel_size, kernel_size))
 
     def forward(self, imgs, guidance):
         b, c, h, w = imgs.shape

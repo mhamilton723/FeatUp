@@ -13,7 +13,7 @@ class MaskCLIPFeaturizer(nn.Module):
             "ViT-B/16",
             download_root=os.getenv('TORCH_HOME', os.path.join(os.path.expanduser('~'), '.cache', 'torch'))
         )
-        self.model.eval().cuda()
+        self.model.eval()
         self.patch_size = self.model.visual.patch_size
 
     def forward(self, img):
