@@ -32,9 +32,10 @@ def plot_lang_heatmaps(model, image, lr_feats, hr_feats, text_query):
     text_feats /= text_feats.norm(dim=-1, keepdim=True)
 
     # upscale low-res features with interpolation
+    input_size = image.shape[1:]
     lr_feats = torch.nn.functional.interpolate(
                 lr_feats.unsqueeze(0), 
-                size=(224, 224), 
+                size=input_size, 
                 mode="bicubic", 
                 align_corners=False
     ).squeeze(0)
