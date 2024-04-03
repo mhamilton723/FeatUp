@@ -220,8 +220,8 @@ class JBULearnedRange(torch.nn.Module):
         pos_temp = self.range_temp.exp().clamp_min(1e-4).clamp_max(1e4)
         return F.softmax(pos_temp * torch.einsum("bchwp,bchw->bphw", queries, proj_x), dim=1)
 
-    def get_spatial_kernel(self):
-        dist_range = torch.linspace(-1, 1, self.diameter, device=self.sigma_spatial.device)
+    def get_spatial_kernel(self, device):
+        dist_range = torch.linspace(-1, 1, self.diameter, device=device)
         x, y = torch.meshgrid(dist_range, dist_range)
         patch = torch.cat([x.unsqueeze(0), y.unsqueeze(0)], dim=0)
         return torch.exp(- patch.square().sum(0) / (2 * self.sigma_spatial ** 2)) \
@@ -232,7 +232,7 @@ class JBULearnedRange(torch.nn.Module):
         SB, SC, SH, SQ = source.shape
         assert (SB == GB)
 
-        spatial_kernel = self.get_spatial_kernel()
+        spatial_kernel = self.get_spatial_kernel(source.device)
         range_kernel = self.get_range_kernel(guidance)
 
         combined_kernel = range_kernel * spatial_kernel
@@ -246,7 +246,8 @@ class JBULearnedRange(torch.nn.Module):
         hr_source_padded = F.pad(hr_source, pad=[self.radius] * 4, mode='reflect')
 
         # (B C, H+Pad, W+Pad) x (B, H, W, KH, KW) -> BCHW
-        return AdaptiveConv.apply(hr_source_padded, combined_kernel)
+        result =  AdaptiveConv.apply(hr_source_padded, combined_kernel)
+        return result
 
 
 class JBUStack(torch.nn.Module):

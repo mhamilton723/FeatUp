@@ -1,6 +1,7 @@
 #include <torch/extension.h>
 
 #include <cuda.h>
+#include <ATen/cuda/CUDAContext.h>
 #include <cuda_runtime.h>
 
 constexpr uint32_t kernel_channel_depth = 2;
@@ -124,6 +125,7 @@ T div_round_up(T a, T b) {
 }
 
 Tensor adaptive_conv_cuda_forward(Tensor input, Tensor filters) {
+    at::cuda::set_device(input.device().index());
 
     // Check for error in the input tensors
     TORCH_CHECK(input.dim() == 4, "input must have 4 dimensions");
@@ -174,6 +176,7 @@ Tensor adaptive_conv_cuda_forward(Tensor input, Tensor filters) {
 
 
 Tensor adaptive_conv_cuda_grad_input(Tensor grad_output, Tensor filters) {
+    at::cuda::set_device(grad_output.device().index());
 
     // Check for error in the input tensors
     TORCH_CHECK(grad_output.dim() == 4, "grad_output must have 4 dimensions");
@@ -225,6 +228,7 @@ Tensor adaptive_conv_cuda_grad_input(Tensor grad_output, Tensor filters) {
 }
 
 Tensor adaptive_conv_cuda_grad_filters(Tensor grad_output, Tensor input) {
+    at::cuda::set_device(grad_output.device().index());
 
     // Check for error in the input tensors
     TORCH_CHECK(grad_output.dim() == 4, "grad_output must have 4 dimensions");
