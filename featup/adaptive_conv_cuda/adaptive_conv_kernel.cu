@@ -7,6 +7,7 @@
 constexpr uint32_t kernel_channel_depth = 2;
 
 using torch::Tensor;
+using namespace at;
 
 template <typename scalar_t>
 __launch_bounds__(1024) __global__ void adaptive_conv_forward_kernel(
@@ -159,7 +160,7 @@ Tensor adaptive_conv_cuda_forward(Tensor input, Tensor filters) {
                       div_round_up(C, kernel_channel_depth));
 
     for (uint32_t b = 0; b < B; b++) {
-        AT_DISPATCH_FLOATING_TYPES(out.scalar_type(), "adaptive_conv_forward_cuda", ([&] {
+        AT_DISPATCH_FLOATING_TYPES_AND_HALF(out.scalar_type(), "adaptive_conv_forward_cuda", ([&] {
             adaptive_conv_forward_kernel<scalar_t><<<blocks,tpb>>>(
                 out.packed_accessor64<scalar_t,4,torch::RestrictPtrTraits>(),
                 input.packed_accessor64<scalar_t,4,torch::RestrictPtrTraits>(),
@@ -212,7 +213,7 @@ Tensor adaptive_conv_cuda_grad_input(Tensor grad_output, Tensor filters) {
                       div_round_up(C, kernel_channel_depth));
 
     for (uint32_t b = 0; b < B; b++) {
-        AT_DISPATCH_FLOATING_TYPES(out.scalar_type(), "adaptive_conv_grad_input_cuda", ([&] {
+        AT_DISPATCH_FLOATING_TYPES_AND_HALF(out.scalar_type(), "adaptive_conv_grad_input_cuda", ([&] {
             adaptive_conv_grad_input_kernel<scalar_t><<<blocks,tpb>>>(
                 out.packed_accessor64<scalar_t,4,torch::RestrictPtrTraits>(),
                 grad_output.packed_accessor64<scalar_t,4,torch::RestrictPtrTraits>(),
@@ -267,7 +268,7 @@ Tensor adaptive_conv_cuda_grad_filters(Tensor grad_output, Tensor input) {
 
 
     for (uint32_t b = 0; b < B; b++) {
-        AT_DISPATCH_FLOATING_TYPES(out.scalar_type(), "adaptive_conv_grad_filters_cuda", ([&] {
+        AT_DISPATCH_FLOATING_TYPES_AND_HALF(out.scalar_type(), "adaptive_conv_grad_filters_cuda", ([&] {
             adaptive_conv_grad_filters_kernel<scalar_t><<<blocks,tpb>>>(
                 out.packed_accessor64<scalar_t,5,torch::RestrictPtrTraits>(),
                 grad_output.packed_accessor64<scalar_t,4,torch::RestrictPtrTraits>(),
