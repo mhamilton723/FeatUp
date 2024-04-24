@@ -1,3 +1,4 @@
+import os
 from torch.utils.data import Dataset
 from featup.datasets.ImageNetSubset import ImageNetSubset
 from featup.datasets.COCO import Coco
@@ -54,5 +55,11 @@ def get_dataset(dataroot, name, split, transform, target_transform, include_labe
                    "../sample-images/bird_right.jpg"],
             transform=transform
         )
+    elif name == "custom":
+        list_img = os.listdir(dataroot)
+        return SampleImage(
+            paths=[os.path.join(dataroot, path) for path in list_img],
+            transform=transform
+        )        
     else:
         raise ValueError(f"Unknown dataset {name}")
