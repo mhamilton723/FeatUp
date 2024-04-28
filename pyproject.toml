@@ -19,7 +19,7 @@ dependencies = [
     "torchvision",
     "tqdm",
 ]
-requires-python = ">=3.6"
+requires-python = ">=3.8"
 readme = "README.md"
 license = {text = "MIT"}
 classifiers = [
