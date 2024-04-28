@@ -7,11 +7,13 @@ authors = [
     {name = "Stephanie Fu", email = "fus@berkeley.edu"},
 ]
 dependencies = [
+    "ftfy",
     "kornia",
     "matplotlib",
     "numpy",
     "omegaconf",
     "pytorch-lightning",
+    "regex",
     "scikit-learn",
     "timm==0.4.12",
     "torch",
