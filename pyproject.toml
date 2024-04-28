@@ -1,0 +1,38 @@
+[project]
+name = "featup"
+version = "0.1.2"
+description = "Official code for \"FeatUp: A Model-Agnostic Frameworkfor Features at Any Resolution\" ICLR 2024"
+authors = [
+    {name = "Mark Hamilton", email = "markth@mit.edu"},
+    {name = "Stephanie Fu", email = "fus@berkeley.edu"},
+]
+dependencies = [
+    "kornia",
+    "matplotlib",
+    "numpy",
+    "omegaconf",
+    "pytorch-lightning",
+    "scikit-learn",
+    "timm==0.4.12",
+    "torch",
+    "torchmetrics",
+    "torchvision",
+    "tqdm",
+]
+requires-python = ">=3.6"
+readme = "README.md"
+license = {text = "MIT"}
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+Homepage = "https://github.com/mhamilton723/FeatUp"
+[build-system]
+requires = ["setuptools", "wheel", "torch"]
+build-backend = "setuptools.build_meta"
+
+[tool.pdm]
+distribution = true
