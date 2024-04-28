@@ -35,6 +35,3 @@ Homepage = "https://github.com/mhamilton723/FeatUp"
 [build-system]
 requires = ["setuptools", "wheel", "torch"]
 build-backend = "setuptools.build_meta"
-
-[tool.pdm]
-distribution = true
