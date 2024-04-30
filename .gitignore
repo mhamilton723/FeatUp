@@ -1,1 +1,4 @@
 .env
+.venv
+*.egg-info
+*.so
