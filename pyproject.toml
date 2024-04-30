@@ -37,6 +37,9 @@ Homepage = "https://github.com/mhamilton723/FeatUp"
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
+[tool.pdm.build]
+run-setuptools = true
+
 [tool.pdm.options]
 add = ["--no-isolation"]
 install = ["--no-isolation"]
