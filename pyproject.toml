@@ -32,6 +32,11 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/mhamilton723/FeatUp"
+
 [build-system]
-requires = ["setuptools", "wheel", "torch"]
-build-backend = "setuptools.build_meta"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm.options]
+add = ["--no-isolation"]
+install = ["--no-isolation"]
