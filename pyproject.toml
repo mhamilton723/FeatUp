@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "featup"
+version = "0.1.2"
+description = "Official code for \"FeatUp: A Model-Agnostic Frameworkfor Features at Any Resolution\" ICLR 2024"
+authors = ["Mark Hamilton <markth@mit.edu>",
+           "Stephanie Fu <fus@berkeley.edu>"]
+readme = "README.md"
+packages = [{include = "featup"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+ftfy = "^6.2.0"
+kornia = "^0.7.2"
+matplotlib = "^3.5"
+numpy = "^1.26.4"
+omegaconf = "^2.3.0"
+pytorch-lightning = "^2.2.4"
+regex = "^2024.5.10"
+scikit-learn = "^1.4.2"
+timm = "0.4.12"
+torch = "^2.3.0"
+torchmetrics = "^1.4.0"
+torchvision = "^0.18.0"
+tqdm = "4.66.4"
+jupyter = "^1.0.0"
+ipykernel = "^6.29.4"
+clip = { git = "https://github.com/mhamilton723/CLIP.git", rev = "dce9d43cc659cb9a013745b378c78077fde6aac0" }
+pre-commit = "^3.7.1"
+
+[build-system]
+requires = ["poetry-core", "setuptools", "wheel", "torch",  "cython"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.build]
+script = "build.py"
+generate-setup-file = true
+

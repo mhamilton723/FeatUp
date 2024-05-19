@@ -36,19 +36,49 @@ https://github.com/mhamilton723/FeatUp/assets/6456637/8fb5aa7f-4514-4a97-aebf-76
 
 ## Install
 
-### Pip
-For those just looking to quickly use the FeatUp APIs install via:
-```shell script
-pip install git+https://github.com/mhamilton723/FeatUp
+### Local Development (poetry)
+CUDA kernels get compiled, so nothing is portable and you need `nvcc` to compile them.  
+Make sure your `nvcc --version`  matches that for your pytorch's CUDA, at least the major, ideally also the minor. For me today (19.5.2024) that's
+`torch 2.3.0` and `cuda 12.1`. I iobviously have a small mismatch of CUDA 12.0 and pytorch's cuda 12.1, that works too. Otherwise 
+you may have to compile pytorch from source. 
+
+I work under Ubuntu 24.04 LTS
+```
+python --version: Python 3.12.3
+poetry --version: Poetry (version 1.8.3)
+gcc --version: (Ubuntu 13.2.0-23ubuntu4) 13.2.0
+nvcc --version: Cuda compilation tools, release 12.0, V12.0.140
+```
+* I removed `setup.py`, as it gets created during the build (it's essentially now located inside `build.py`).
+* ** Note: `poetry.lock` contains cuda version dependencies. So unless you have exactly the setup above, it's probably better to `rm poetry.lock` **
+* to install 
+```shell
+poetry install
+poetry shell
+```
+and test: 
+```
+python simple_test.py
 ```
 
-### Local Development
-To install FeatUp for local development and to get access to the sample images install using the following:
+
+### Local Development (pip original method)
+I found the original installation method in the original FeatUp repo did not work for me.  But the following did.
+
 ```shell script
 git clone https://github.com/mhamilton723/FeatUp.git
 cd FeatUp
+python -m venv .venv
+source .venv/bin/activate
+pip install setuptools
+pip install torch 
 pip install -e .
+pip install git+https://github.com/mhamilton723/CLIP.git
+pip install torchvision
+pip install ftfy
 ```
+
+
 
 ## Using Pretrained Upsamplers
 
