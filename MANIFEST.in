@@ -3,3 +3,4 @@ recursive-include featup/adaptive_conv_cuda *.cpp *.cu *.h
 recursive-include featup/configs *.yaml
 recursive-include featup/featurizers *.py
 recursive-include sample-images *
+include featup/featurizers/maskclip/bpe_simple_vocab_16e6.txt.gz
