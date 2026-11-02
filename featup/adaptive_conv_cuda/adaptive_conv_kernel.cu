@@ -94,7 +94,7 @@ __launch_bounds__(1024) __global__ void adaptive_conv_grad_filters_kernel(
 
     const uint32_t w = blockIdx.x * blockDim.x + threadIdx.x;
     const uint32_t h = blockIdx.y * blockDim.y + threadIdx.y;
-    const uint32_t f = blockIdx.z * blockIdx.z + threadIdx.z;
+    const uint32_t f = blockIdx.z * blockDim.z + threadIdx.z;
 
     const uint32_t H = out.size(1);
     const uint32_t W = out.size(2);
